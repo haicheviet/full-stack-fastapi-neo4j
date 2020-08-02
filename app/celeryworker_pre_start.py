@@ -21,7 +21,8 @@ def init() -> None:
     try:
         # Try to create session to check if DB is awake
         session = SessionLocal()
-        result = session.run("call dbms.components() yield name, versions, edition unwind versions as version return name, version, edition;")
+        result = session.run(
+            "call dbms.components() yield name, versions, edition unwind versions as version return name, version, edition;")
     except Exception as e:
         logger.error(e)
         raise e
