@@ -1,0 +1,8 @@
+**__pycache__**
+**.DS_Store**
+
+.vscode
+testing-project
+.mypy_cache
+poetry.lock
+dev-link/

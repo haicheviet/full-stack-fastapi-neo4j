@@ -1,0 +1,97 @@
+version: "3.3"
+services:
+  neo4j:
+    image: neo4j:3.5.14
+    hostname: neo4j
+    container_name: neo4j
+    env_file:
+      - .env
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: ${NEO4J_USERNAME}/${NEO4J_PASSWORD}
+      # NEO4J_AUTH: neo4j/test
+      NEO4J_dbms_logs_debug_level: DEBUG
+      
+      # Enhance config
+      NEO4J_dbms_security_procedures_unrestricted: apoc.*,algo.*
+      NEO4J_apoc_import_file_enabled: "true"
+      NEO4J_dbms_shell_enabled: "true"
+      NEO4J_dbms_memory_pagecache_size: 4G
+      NEO4J_dbms_memory_heap_max__size: 512m
+      NEO4J_dbms_memory_heap_initial__size: 512m
+    volumes:
+      - my_neo4j_plugins:/plugins
+      - my_neo4j_data:/data
+      - my_neo4j_import:/import
+      # - my_neo4j_conf:/conf
+      # - ./conf:/conf
+  # app:
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - neo4j
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     args:
+  #       APP_ENV: ${APP_ENV}
+  #       DATA_DRIVE_ID: ${DATA_DRIVE_ID}
+  #   ports:
+  #     - "7777:7777"
+  #   restart: always
+    
+  # flower:
+  #   image: mher/flower
+  #   networks:
+  #     - default
+  #   env_file:
+  #     - .env
+  #   command:
+  #     - "--broker=pyamqp://${USERNAME}:${PASSWORD}@broker-rabbitmq//"
+  #     # For the "Broker" tab to work in the flower UI, uncomment the following command argument,
+  #     # and change the queue service's image as well
+  #     # - "--broker_api=http://guest:guest@queue:15672/api//"
+
+  # broker-rabbitmq:
+  #   image: "rabbitmq:3.7.14-management"
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - RABBITMQ_DEFAULT_USER=jobhopai
+  #     - RABBITMQ_DEFAULT_PASS=hola
+
+  # celeryworker:
+  #   image: 'celeryworker:${TAG-latest}'
+  #   depends_on:
+  #     - neo4j
+  #     - broker-rabbitmq
+  #   env_file:
+  #     - .env
+  #   build:
+  #     context: .
+  #     dockerfile: celeryworker.dockerfile
+  #     args:
+  #       APP_ENV: ${APP_ENV}
+  #       DATA_DRIVE_ID: ${DATA_DRIVE_ID}
+
+  # celerybeat:
+  #   image: 'celerybeat:${TAG-latest}'
+  #   depends_on:
+  #     - neo4j
+  #     - broker-rabbitmq
+  #   env_file:
+  #     - .env
+  #   build:
+  #     context: .
+  #     dockerfile: celeryworker.dockerfile
+  #     args:
+  #       APP_ENV: ${APP_ENV}
+  #       DATA_DRIVE_ID: ${DATA_DRIVE_ID}
+
+volumes:
+  my_neo4j_plugins:
+  my_neo4j_data:
+  my_neo4j_import:
+  # my_neo4j_conf:
