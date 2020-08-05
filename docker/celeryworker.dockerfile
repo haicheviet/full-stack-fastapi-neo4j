@@ -19,6 +19,7 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-
 
 #WORKDIR /app/
 COPY ./pyproject.toml ./pyproject.toml
+
 # Install dependency
 RUN bash -c "if [ $APP_ENV == 'dev' ] ; then poetry install --no-root ; else poetry install --no-root --no-dev ; fi"
 

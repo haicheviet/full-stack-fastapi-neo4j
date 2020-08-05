@@ -41,46 +41,42 @@ services:
     volumes:
       - my_neo4j_plugins:/plugins
       - my_neo4j_data:/data
-      - ./app/db/back_up:/var/lib/neo4j/import
-      # - my_neo4j_conf:/conf
-      # - ./conf:/conf
+      - my_neo4j_back_up:/var/lib/neo4j/import
 
-#
-# flower:
-#   image: mher/flower
-#   networks:
-#     - default
-#   env_file:
-#     - .env
-#   command:
-#     - "--broker=pyamqp://${USERNAME}:${PASSWORD}@broker-rabbitmq//"
-#     # For the "Broker" tab to work in the flower UI, uncomment the following command argument,
-#     # and change the queue service's image as well
-#     # - "--broker_api=http://guest:guest@queue:15672/api//"
-#
-# broker-rabbitmq:
-#   image: "rabbitmq:3.7.14-management"
-#   env_file:
-#     - .env
-#   environment:
-#     - RABBITMQ_DEFAULT_USER=jobhopai
-#     - RABBITMQ_DEFAULT_PASS=hola
-#
-#
-#
-# celerybeat:
-#   image: 'celerybeat:${TAG-latest}'
-#   depends_on:
-#     - neo4j
-#     - broker-rabbitmq
-#   env_file:
-#     - .env
-#   build:
-#     context: .
-#     dockerfile: celeryworker.dockerfile
-#     args:
-#       APP_ENV: ${APP_ENV}
-#       DATA_DRIVE_ID: ${DATA_DRIVE_ID}
+  flower:
+    image: mher/flower
+    networks:
+      - default
+    env_file:
+      - .env
+    command:
+      - "--broker=pyamqp://${USERNAME}:${PASSWORD}@broker-rabbitmq//"
+      # For the "Broker" tab to work in the flower UI, uncomment the following command argument,
+      # and change the queue service's image as well
+      # - "--broker_api=http://guest:guest@queue:15672/api//"
+
+  broker-rabbitmq:
+    image: "rabbitmq:3.7.14-management"
+    env_file:
+      - .env
+    environment:
+      - RABBITMQ_DEFAULT_USER=${USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${PASSWORD}
+
+
+  celerybeat:
+    image: 'celerybeat:${TAG-latest}'
+    depends_on:
+      - neo4j
+      - broker-rabbitmq
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: celeryworker.dockerfile
+      args:
+        APP_ENV: ${APP_ENV}
+
 #  celeryworker:
 #    image: 'celeryworker:${TAG-latest}'
 #    depends_on:
@@ -98,4 +94,5 @@ services:
 volumes:
   my_neo4j_plugins:
   my_neo4j_data:
+  my_neo4j_back_up:
   # my_neo4j_conf:
