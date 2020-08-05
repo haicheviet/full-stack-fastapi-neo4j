@@ -1,8 +1,5 @@
 import logging
-import os
 from logging.config import dictConfig
-from dotenv import load_dotenv
-load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -30,9 +27,9 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_headers=["*"],
     )
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory="app/web/static"), name="static")
 
-templates = Jinja2Templates(directory="./app/templates")
+templates = Jinja2Templates(directory="./app/web/templates")
 
 
 @app.get("/")

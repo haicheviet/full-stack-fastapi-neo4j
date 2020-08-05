@@ -1,10 +1,10 @@
 import os
 import secrets
 from typing import Generator
+
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
-from app.core.config import settings
 from app.db.session import SessionLocal
 
 security = HTTPBasic()

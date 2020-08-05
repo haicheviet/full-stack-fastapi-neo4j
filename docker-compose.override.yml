@@ -32,16 +32,15 @@ services:
   app:
     ports:
       - "7777:7777"
+      - "8888:8888"
     volumes:
       - ./:/app
     environment:
       - JUPYTER=jupyter lab --ip=0.0.0.0 --allow-root --NotebookApp.custom_display_url=http://127.0.0.1:8888
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/app.dockerfile
       args:
-        APP_ENV: ${APP_ENV}
-        DATA_DRIVE_ID: ${DATA_DRIVE_ID}
         INSTALL_JUPYTER: ${INSTALL_JUPYTER-true}
     # command: bash -c "while true; do sleep 1; done"  # Infinite loop to keep container live doing nothing
     command: /start-reload.sh
@@ -51,39 +50,39 @@ services:
 #      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
 #      - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
 
-  flower:
-    ports:
-      - "5555:5555"
-
-  broker-rabbitmq:
-    image: "rabbitmq:3.7.14-management"
-    env_file:
-      - .env
-    environment:
-      - RABBITMQ_DEFAULT_USER=neo4j
-      - RABBITMQ_DEFAULT_PASS=test
-
-  celeryworker:
-    volumes:
-      - ./:/app
-    build:
-      context: .
-      dockerfile: celeryworker.dockerfile
-      args:
-        APP_ENV: ${APP_ENV}
-        DATA_DRIVE_ID: ${DATA_DRIVE_ID}
-        INSTALL_JUPYTER: ${INSTALL_JUPYTER-true}
-
-  celerybeat:
-    volumes:
-      - ./:/app
-    build:
-      context: .
-      dockerfile: celeryworker.dockerfile
-      args:
-        APP_ENV: ${APP_ENV}
-        DATA_DRIVE_ID: ${DATA_DRIVE_ID}
-        INSTALL_JUPYTER: ${INSTALL_JUPYTER-true}
+#  flower:
+#    ports:
+#      - "5555:5555"
+#
+#  broker-rabbitmq:
+#    image: "rabbitmq:3.7.14-management"
+#    env_file:
+#      - .env
+#    environment:
+#      - RABBITMQ_DEFAULT_USER=neo4j
+#      - RABBITMQ_DEFAULT_PASS=test
+#
+#  celeryworker:
+#    volumes:
+#      - ./:/app
+#    build:
+#      context: .
+#      dockerfile: celeryworker.dockerfile
+#      args:
+#        APP_ENV: ${APP_ENV}
+#        DATA_DRIVE_ID: ${DATA_DRIVE_ID}
+#        INSTALL_JUPYTER: ${INSTALL_JUPYTER-true}
+#
+#  celerybeat:
+#    volumes:
+#      - ./:/app
+#    build:
+#      context: .
+#      dockerfile: celeryworker.dockerfile
+#      args:
+#        APP_ENV: ${APP_ENV}
+#        DATA_DRIVE_ID: ${DATA_DRIVE_ID}
+#        INSTALL_JUPYTER: ${INSTALL_JUPYTER-true}
 
 #networks:
 #  traefik-public:

@@ -1,7 +1,9 @@
+from typing import Optional, List
+
+from pydantic import BaseModel
+
 from app.db.node import Node
 from app.schemas.movies import MoviesAttribute
-from typing import Optional, List
-from pydantic import BaseModel
 
 
 class PersonAttribute(BaseModel):

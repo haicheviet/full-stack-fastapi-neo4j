@@ -1,3 +1,5 @@
+from typing import Any
+
 from fastapi import APIRouter, Depends
 from neo4j.work.simple import Session
 from starlette.requests import Request
@@ -11,12 +13,12 @@ router = APIRouter()
 
 @router.get("/graph", response_model=GraphItem)
 @decorator_logger_info
-def get_graph(request: Request, limit: int = 100, session: Session = Depends(deps.get_db)):
+def get_graph(request: Request, limit: int = 100, session: Session = Depends(deps.get_db)) -> Any:
     results = session.run("MATCH (m:Movie)<-[:ACTED_IN]-(a:Person) "
-             "RETURN m.title as movie, collect(a.name) as cast "
-             "LIMIT $limit", {"limit": limit})
+                          "RETURN m.title as movie, collect(a.name) as cast "
+                          "LIMIT $limit", {"limit": limit})
     nodes = []
-    rels = []
+    relation = []
     i = 0
     for record in results:
         nodes.append({"title": record["movie"], "label": "movie"})
@@ -30,6 +32,6 @@ def get_graph(request: Request, limit: int = 100, session: Session = Depends(dep
                 nodes.append(actor)
                 source = i
                 i += 1
-            rels.append({"source": source, "target": target})
+            relation.append({"source": source, "target": target})
 
-    return {"nodes": nodes, "links": rels}
+    return {"nodes": nodes, "links": relation}

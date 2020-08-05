@@ -3,7 +3,7 @@ import os
 level_log = "INFO" if os.getenv("APP_ENV") != "test" else "DEBUG"
 BASE_LOGGER = {
     "version": 1,
-    # Seperate uvicorn log and custom log
+    # Separate uvicorn log and custom log
     "disable_existing_loggers": False,
     "formatters": {
         "standard": {
@@ -25,6 +25,5 @@ BASE_LOGGER = {
             "handlers": ["fast_api"],
             "level": f"INFO"
         }
-
     }
 }

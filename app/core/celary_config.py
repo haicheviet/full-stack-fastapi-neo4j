@@ -1,6 +1,6 @@
 from celery.schedules import crontab
 
-CELERY_IMPORTS = 'app.core.task.update_index'
+CELERY_IMPORTS = 'app.core.task.periodic_task'
 CELERY_TIMEZONE = 'UTC'
 
 # CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml']
@@ -9,7 +9,7 @@ CELERY_TIMEZONE = 'UTC'
 
 CELERYBEAT_SCHEDULE = {
     'schedule_back_up_every_day': {
-        'task': 'app.core.task.periodic_task.back_up',
-        'schedule': crontab(minute=0, hour=0)
+        'task': 'app.core.task.periodic_task.back_up_scrip',
+        'schedule': crontab(minute=15)
     }
 }
