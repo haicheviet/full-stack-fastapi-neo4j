@@ -45,12 +45,12 @@ services:
 
   flower:
     image: mher/flower
-    networks:
-      - default
+    #    networks:
+    #      - default
     env_file:
       - .env
     command:
-      - "--broker=pyamqp://${USERNAME}:${PASSWORD}@broker-rabbitmq//"
+      - "--broker=pyamqp://${FIRST_SUPERUSER}:${FIRST_SUPERUSER_PASSWORD}@broker-rabbitmq//"
       # For the "Broker" tab to work in the flower UI, uncomment the following command argument,
       # and change the queue service's image as well
       # - "--broker_api=http://guest:guest@queue:15672/api//"
@@ -60,36 +60,37 @@ services:
     env_file:
       - .env
     environment:
-      - RABBITMQ_DEFAULT_USER=${USERNAME}
-      - RABBITMQ_DEFAULT_PASS=${PASSWORD}
+      - RABBITMQ_DEFAULT_USER=${FIRST_SUPERUSER}
+      - RABBITMQ_DEFAULT_PASS=${FIRST_SUPERUSER_PASSWORD}
 
 
   celerybeat:
     image: 'celerybeat:${TAG-latest}'
     depends_on:
-      - neo4j
+      - db
       - broker-rabbitmq
     env_file:
       - .env
+    command: /worker-beat-start.sh
     build:
       context: .
-      dockerfile: celeryworker.dockerfile
+      dockerfile: ./docker/celeryworker.dockerfile
       args:
         APP_ENV: ${APP_ENV}
 
-#  celeryworker:
-#    image: 'celeryworker:${TAG-latest}'
-#    depends_on:
-#      - neo4j
-#      - broker-rabbitmq
-#    env_file:
-#      - .env
-#    build:
-#      context: .
-#      dockerfile: celeryworker.dockerfile
-#      args:
-#        APP_ENV: ${APP_ENV}
-#        DATA_DRIVE_ID: ${DATA_DRIVE_ID}
+  celery:
+    image: 'celery:${TAG-latest}'
+    depends_on:
+      - db
+      - broker-rabbitmq
+    env_file:
+      - .env
+    command: /worker-start.sh
+    build:
+      context: .
+      dockerfile: ./docker/celeryworker.dockerfile
+      args:
+        APP_ENV: ${APP_ENV}
 
 volumes:
   my_neo4j_plugins:

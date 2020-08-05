@@ -1,7 +1,6 @@
-import secrets
-from typing import List, Optional, Union, Dict, Any
+from typing import List, Optional, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, validator, AnyUrl, HttpUrl
+from pydantic import AnyHttpUrl, BaseSettings, validator, HttpUrl
 
 
 class Settings(BaseSettings):
@@ -36,20 +35,6 @@ class Settings(BaseSettings):
     NEO4J_PASSWORD: str
     NEO4J_DB: str
 
-    # @validator("NEO4J_DATABASE_URL", pre=True)
-    # def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
-    #
-    #     NEO4J_PARSE = urlparse(v)
-    #     if isinstance(v, str):
-    #         return v
-    #     return Neo4jDsn.build(
-    #         scheme=NEO4J_PARSE.scheme,
-    #         user=NEO4J_PARSE.username,
-    #         password=NEO4J_PARSE.password,
-    #         host=NEO4J_PARSE.hostname,
-    #         path=f"/{values.get('NEO4J_DB') or ''}",
-    #     )
-
     CELERY_RESULT_BACKEND: str
     CELERY_BROKER: str
 
@@ -61,8 +46,8 @@ class Settings(BaseSettings):
             return None
         return v
 
-    # FIRST_SUPERUSER: EmailStr
-    # FIRST_SUPERUSER_PASSWORD: str
+    FIRST_SUPERUSER: str
+    FIRST_SUPERUSER_PASSWORD: str
 
     class Config:
         case_sensitive = True

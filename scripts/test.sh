@@ -4,7 +4,6 @@
 set -e
 
 DOMAIN=backend \
-INSTALL_DEV=true \
 docker-compose \
 -f docker-compose.yml \
 config > docker-stack.yml

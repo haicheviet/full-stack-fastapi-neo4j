@@ -50,17 +50,9 @@ services:
 #      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
 #      - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
 
-#  flower:
-#    ports:
-#      - "5555:5555"
-#
-#  broker-rabbitmq:
-#    image: "rabbitmq:3.7.14-management"
-#    env_file:
-#      - .env
-#    environment:
-#      - RABBITMQ_DEFAULT_USER=neo4j
-#      - RABBITMQ_DEFAULT_PASS=test
+  flower:
+    ports:
+      - "5555:5555"
 #
 #  celeryworker:
 #    volumes:
@@ -81,8 +73,6 @@ services:
 #      dockerfile: celeryworker.dockerfile
 #      args:
 #        APP_ENV: ${APP_ENV}
-#        DATA_DRIVE_ID: ${DATA_DRIVE_ID}
-#        INSTALL_JUPYTER: ${INSTALL_JUPYTER-true}
 
 #networks:
 #  traefik-public:

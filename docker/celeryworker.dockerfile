@@ -33,6 +33,10 @@ ENV PYTHONPATH=/app
 
 COPY ./worker-start.sh /worker-start.sh
 
+COPY ./worker-beat-start.sh /worker-beat-start.sh
+
 RUN chmod +x /worker-start.sh
 
-CMD ["bash", "/worker-start.sh"]
+RUN chmod +x /worker-beat-start.sh
+
+ENTRYPOINT ["bash"]
