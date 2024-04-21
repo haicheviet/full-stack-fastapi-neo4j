@@ -6,11 +6,11 @@ authors = ["hai che <cheviethai123@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-fastapi = "0.109.1"
-gunicorn = "^21.0.4"
+fastapi = "0.109.2"
+gunicorn = "^22.0.0"
 neo4j = "^4.1.0"
 uvicorn = "^0.29.0"
-celery = "^4.4.7"
+celery = "^5.4.0"
 aiofiles = "^0.5.0"
 tenacity = "^6.2.0"
 jinja2 = "^2.11.2"
